@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+    branches: [development, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FQBN: FACTS:stm32:slm_cpu_0
+  INDEX: package_FACTS_slm_cpu_0_index.json
+
+jobs:
+  uploader:
+    name: Uploader - test and cross-compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: gofmt
+        working-directory: tools/slm-cpu-0-netflash
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: go vet
+        working-directory: tools/slm-cpu-0-netflash
+        run: go vet ./...
+      - name: go test
+        working-directory: tools/slm-cpu-0-netflash
+        run: go test -count=1 -v ./...
+      - name: Cross-compile every host
+        run: tools/ci/build-uploader.sh dist/tools 0.0.0-ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: slm-cpu-0-netflash-binaries
+          path: dist/tools/
+
+  uploader-runs:
+    name: Uploader - runs on ${{ matrix.host }}
+    needs: uploader
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: ubuntu-latest, host: x86_64-pc-linux-gnu, exe: slm-cpu-0-netflash }
+          - { runner: ubuntu-24.04-arm, host: aarch64-linux-gnu, exe: slm-cpu-0-netflash }
+          - { runner: macos-13, host: x86_64-apple-darwin, exe: slm-cpu-0-netflash }
+          - { runner: macos-14, host: arm64-apple-darwin, exe: slm-cpu-0-netflash }
+          - { runner: windows-latest, host: i686-mingw32, exe: slm-cpu-0-netflash.exe }
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: slm-cpu-0-netflash-binaries
+          path: dist/tools
+      - name: Execute the cross-compiled binary
+        run: |
+          set -euo pipefail
+          BIN="dist/tools/${{ matrix.host }}/${{ matrix.exe }}"
+          chmod +x "$BIN"
+          out="$("$BIN" version)"
+          echo "$out"
+          [ "$out" = "slm-cpu-0-netflash 0.0.0-ci" ] || { echo "unexpected version output"; exit 1; }
+          set +e
+          noip="$("$BIN" upload --bin "$BIN" 2>&1)"; rc=$?
+          set -e
+          printf '%s\n' "$noip"
+          [ "$rc" -eq 2 ] || { echo "missing --ip should be a usage error (2), got $rc"; exit 1; }
+
+  core:
+    name: Core - install from a locally built index and compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Build the release artefacts from this working tree
+        run: |
+          set -euo pipefail
+          tools/ci/build-uploader.sh dist/tools 9.9.9
+          python3 tools/ci/build-release.py --version 9.9.9 --out dist
+          (cd dist && nohup python3 -m http.server 8099 >/dev/null 2>&1 &)
+          for i in $(seq 20); do curl -sf http://127.0.0.1:8099/ >/dev/null && break; sleep 0.5; done
+          python3 tools/ci/localize-index.py "dist/$INDEX" http://127.0.0.1:8099
+      - name: The platform must not contain the backplane driver
+        run: |
+          set -euo pipefail
+          if tar tjf dist/FACTS-stm32-slm-cpu-0-9.9.9.tar.bz2 | grep -iE 'backplane|slmmx|slm_mx'; then
+            echo "the core archive contains files it must not ship"; exit 1
+          fi
+      - name: Install the core
+        run: |
+          set -euo pipefail
+          IDX="file://$PWD/dist/$INDEX"
+          arduino-cli core update-index --additional-urls "$IDX"
+          arduino-cli core install FACTS:stm32@9.9.9 --additional-urls "$IDX"
+          arduino-cli board listall | grep -F "$FQBN"
+      - name: The uploader must be installed as a tool, and must run
+        run: |
+          set -euo pipefail
+          TOOL="$(find "$HOME/.arduino15/packages/FACTS/tools/slm-cpu-0-netflash" -name slm-cpu-0-netflash -type f | head -1)"
+          test -n "$TOOL" || { echo "slm-cpu-0-netflash was not installed"; exit 1; }
+          "$TOOL" version | grep -qx 'slm-cpu-0-netflash 9.9.9'
+      - name: Compile the smoke sketch
+        run: arduino-cli compile --fqbn "$FQBN" --warnings default tools/ci/sketches/slm_cpu_0_smoke
+      - name: The upload recipe must name no host interpreter and no default address
+        run: |
+          set -euo pipefail
+          if grep -nE '^tools\..*\.pattern=.*(python|perl|ruby|bash| sh |/usr/bin)' overlay/platform.upload.txt; then
+            echo "upload recipe depends on a host interpreter"; exit 1
+          fi
+          if grep -nE '^[a-z0-9_]+\.upload\.port\.address=' overlay/boards.txt; then
+            echo "boards.txt hardcodes an upload address"; exit 1
+          fi
