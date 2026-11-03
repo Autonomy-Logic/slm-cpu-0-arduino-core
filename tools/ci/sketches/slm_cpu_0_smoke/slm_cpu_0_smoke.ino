@@ -1,7 +1,8 @@
 /*
  * Compile check for FACTS:stm32:slm_cpu_0: the network API as the OpenPLC
- * runtime uses it plus the bootloader API. Runs too: a Modbus-shaped echo on
- * TCP 502 (0x4C with magic enters the bootloader) and a reply on UDP 33333.
+ * runtime uses it plus the bootloader API. Runs too: on TCP 502 it answers
+ * 0x4C (then enters the bootloader), 0x47 and 0x48 as the runtime does and echoes
+ * anything else; it replies on UDP 33333.
  */
 #include <SPI.h>
 #include <Ethernet.h>
@@ -38,6 +39,21 @@ void setup()
   started = millis();
 }
 
+// Modbus TCP reply: the request's MBAP header with a new length, then fc, 0x7E (success), data.
+static void replyStatus(EthernetClient &client, const uint8_t *req, uint8_t fc, const uint8_t *data, uint8_t len)
+{
+  uint8_t out[7 + 2 + 32];
+  if (len > 32) len = 32;
+  memcpy(out, req, 7);
+  uint16_t follow = (uint16_t)(1 + 2 + len);
+  out[4] = (uint8_t)(follow >> 8);
+  out[5] = (uint8_t)follow;
+  out[7] = fc;
+  out[8] = 0x7E;
+  if (len) memcpy(out + 9, data, len);
+  client.write(out, (size_t)(9 + len));
+}
+
 void loop()
 {
   EthernetClient client = server.available();
@@ -47,9 +63,9 @@ void loop()
     while (client.available() && n < (int)sizeof(buf)) {
       buf[n++] = client.read();
     }
-    // FC 0x4C with the magic B0 07 10 AD: hand over to the bootloader
+    // FC 0x4C with the magic B0 07 10 AD: answer 4C 7E, then hand over to the bootloader
     if (n >= 12 && buf[7] == 0x4C && buf[8] == 0xB0 && buf[9] == 0x07 && buf[10] == 0x10 && buf[11] == 0xAD) {
-      client.write(buf, n);
+      replyStatus(client, buf, 0x4C, nullptr, 0);
       client.stop();
       uint8_t ip[4], mask[4], gw[4];
       IPAddress a = Ethernet.localIP(), m = Ethernet.subnetMask(), g = Ethernet.gatewayIP();
@@ -59,6 +75,18 @@ void loop()
         gw[i] = g[i];
       }
       slm_cpu_0_enter_bootloader(SLM_CPU_0_REASON_UPLOAD, ip, mask, gw);
+    }
+    // FC 0x47: runtime version, answered as 47 7E <text>
+    if (n >= 8 && buf[7] == 0x47) {
+      static const char version[] = "smoke";
+      replyStatus(client, buf, 0x47, (const uint8_t *)version, sizeof(version) - 1);
+      return;
+    }
+    // FC 0x48: device id, answered as 48 7E <length 0> (no licence identity)
+    if (n >= 8 && buf[7] == 0x48) {
+      static const uint8_t noId[] = {0};
+      replyStatus(client, buf, 0x48, noId, sizeof(noId));
+      return;
     }
     client.write(buf, n);
   }
