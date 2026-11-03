@@ -1,0 +1,81 @@
+# FACTS SLM-CPU-0 boards
+# See: https://arduino.github.io/arduino-cli/latest/platform-specification/
+
+menu.xserial=U(S)ART support
+menu.opt=Optimize
+menu.dbg=Debug symbols and core logs
+menu.rtlib=C Runtime Library
+menu.upload_method=Upload method
+
+################################################################################
+# SLM-CPU-0: STM32F407VETx, application above the network bootloader
+
+slm_cpu_0.name=SLM-CPU-0
+slm_cpu_0.build.core=arduino
+slm_cpu_0.build.board=SLM_CPU_0
+slm_cpu_0.build.variant=SLM_CPU_0
+slm_cpu_0.build.variant_h=variant_SLM_CPU_0.h
+slm_cpu_0.build.st_extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial}
+slm_cpu_0.build.mcu=cortex-m4
+slm_cpu_0.build.fpu=-mfpu=fpv4-sp-d16
+slm_cpu_0.build.float-abi=-mfloat-abi=hard
+slm_cpu_0.build.series=STM32F4xx
+slm_cpu_0.build.product_line=STM32F407xx
+slm_cpu_0.build.cmsis_lib_gcc=arm_cortexM4lf_math
+# Sectors 4-7; the bootloader, identity and config log sit below 0x08010000
+slm_cpu_0.build.flash_offset=0x10000
+slm_cpu_0.upload.maximum_size=458752
+slm_cpu_0.upload.maximum_data_size=131072
+
+# Upload method: the editor passes the board's IP as --port
+slm_cpu_0.menu.upload_method.network=Ethernet (network bootloader)
+slm_cpu_0.menu.upload_method.network.upload.protocol=network
+slm_cpu_0.menu.upload_method.network.upload.tool=slm_cpu_0_netflash
+slm_cpu_0.menu.upload_method.network.upload.tool.default=slm_cpu_0_netflash
+slm_cpu_0.menu.upload_method.network.upload.tool.network=slm_cpu_0_netflash
+
+slm_cpu_0.menu.upload_method.swd=STM32CubeProgrammer (SWD, unprotected boards only)
+slm_cpu_0.menu.upload_method.swd.upload.protocol=swd
+slm_cpu_0.menu.upload_method.swd.upload.options=-a {upload.address} -m {upload.mode} -s {upload.start}
+slm_cpu_0.menu.upload_method.swd.upload.tool=stm32CubeProg
+slm_cpu_0.menu.upload_method.swd.upload.tool.default=stm32CubeProg
+
+# Serialx activation
+slm_cpu_0.menu.xserial.generic=Enabled (generic 'Serial')
+slm_cpu_0.menu.xserial.none=Enabled (no generic 'Serial')
+slm_cpu_0.menu.xserial.none.build.xSerial=-DHAL_UART_MODULE_ENABLED -DHWSERIAL_NONE
+slm_cpu_0.menu.xserial.disabled=Disabled (no Serial support)
+slm_cpu_0.menu.xserial.disabled.build.xSerial=
+
+# Optimizations
+slm_cpu_0.menu.opt.osstd=Smallest (-Os default)
+slm_cpu_0.menu.opt.oslto=Smallest (-Os) with LTO
+slm_cpu_0.menu.opt.oslto.build.flags.optimize=-Os -flto
+slm_cpu_0.menu.opt.o1std=Fast (-O1)
+slm_cpu_0.menu.opt.o1std.build.flags.optimize=-O1
+slm_cpu_0.menu.opt.o2std=Faster (-O2)
+slm_cpu_0.menu.opt.o2std.build.flags.optimize=-O2
+slm_cpu_0.menu.opt.o3std=Fastest (-O3)
+slm_cpu_0.menu.opt.o3std.build.flags.optimize=-O3
+slm_cpu_0.menu.opt.ogstd=Debug (-Og)
+slm_cpu_0.menu.opt.ogstd.build.flags.optimize=-Og
+
+# Debug information
+slm_cpu_0.menu.dbg.none=None
+slm_cpu_0.menu.dbg.enable_sym=Symbols Enabled (-g)
+slm_cpu_0.menu.dbg.enable_sym.build.flags.debug=-g -DNDEBUG
+slm_cpu_0.menu.dbg.enable_log=Core logs Enabled
+slm_cpu_0.menu.dbg.enable_log.build.flags.debug=
+slm_cpu_0.menu.dbg.enable_all=Core Logs and Symbols Enabled (-g)
+slm_cpu_0.menu.dbg.enable_all.build.flags.debug=-g
+
+# C Runtime Library
+slm_cpu_0.menu.rtlib.nano=Newlib Nano (default)
+slm_cpu_0.menu.rtlib.nanofp=Newlib Nano + Float Printf
+slm_cpu_0.menu.rtlib.nanofp.build.flags.ldspecs=--specs=nano.specs -u _printf_float
+slm_cpu_0.menu.rtlib.nanofs=Newlib Nano + Float Scanf
+slm_cpu_0.menu.rtlib.nanofs.build.flags.ldspecs=--specs=nano.specs -u _scanf_float
+slm_cpu_0.menu.rtlib.nanofps=Newlib Nano + Float Printf/Scanf
+slm_cpu_0.menu.rtlib.nanofps.build.flags.ldspecs=--specs=nano.specs -u _printf_float -u _scanf_float
+slm_cpu_0.menu.rtlib.full=Newlib Standard
+slm_cpu_0.menu.rtlib.full.build.flags.ldspecs=
