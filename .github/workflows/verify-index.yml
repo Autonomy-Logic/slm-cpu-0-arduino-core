@@ -1,0 +1,25 @@
+name: Verify published index
+
+# Every install reads this index; a URL that does not resolve or a checksum that
+# does not match breaks installs for users. Check it weekly and when it changes.
+on:
+  push:
+    branches: [main]
+    paths: ['package_FACTS_slm_cpu_0_index.json']
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download every asset and check size and SHA-256
+        run: python3 tools/ci/verify-index.py package_FACTS_slm_cpu_0_index.json
