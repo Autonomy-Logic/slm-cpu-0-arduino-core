@@ -29,8 +29,10 @@ keep their original copyright and licence headers.
   F407V(E-G)T variant (BSD-3-Clause, STMicroelectronics).
 - LwIP and STM32Ethernet are bundled as `SLM_CPU_0_LwIP` and
   `SLM_CPU_0_Ethernet`, with renamed headers, the MAC taken from the board's
-  identity sector, a 20 s DHCP timeout, a link-local fallback address, and a
-  `macAddress()` alias.
+  identity sector, a 20 s DHCP timeout, a link-local fallback address, a
+  `macAddress()` alias, a public `EthernetServer::accept()` that hands each
+  new connection to the caller once, `EthernetClient::availableForWrite()`,
+  and an initialised flag in the accept callback.
 - `platform.txt` drops the debugger and CMSIS-DSP references and uses the
   short tool name `arm-gcc`.
 - The uploader `slm-cpu-0-netflash` (`tools/slm-cpu-0-netflash/`) and the

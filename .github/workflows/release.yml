@@ -76,6 +76,7 @@ jobs:
           arduino-cli core update-index --additional-urls "$IDX"
           arduino-cli core install "FACTS:stm32@$V" --additional-urls "$IDX"
           arduino-cli compile --fqbn FACTS:stm32:slm_cpu_0 tools/ci/sketches/slm_cpu_0_smoke
+          arduino-cli compile --fqbn FACTS:stm32:slm_cpu_0 tools/ci/sketches/slm_cpu_0_net_api
           TOOL="$(find "$HOME/.arduino15/packages/FACTS/tools/slm-cpu-0-netflash" -name slm-cpu-0-netflash -type f | head -1)"
           "$TOOL" version | grep -qx "slm-cpu-0-netflash $V"
           echo "artefacts install, compile and run"

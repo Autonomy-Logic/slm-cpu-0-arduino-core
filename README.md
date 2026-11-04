@@ -46,6 +46,7 @@ flash layout through `<boot_shared.h>`.
 | `tools/ci/localize-index.py` | points an index at a local server for pre-release tests |
 | `tools/ci/verify-index.py` | checks every asset of a published index |
 | `tools/ci/sketches/slm_cpu_0_smoke/` | compile check for the platform |
+| `tools/ci/sketches/slm_cpu_0_net_api/` | compile check for the server API used by OPC UA and S7 |
 | `tools/ci/RENAMES.md` | identifier mapping from the SLM-MX proof of concept |
 
 ## Build a release locally

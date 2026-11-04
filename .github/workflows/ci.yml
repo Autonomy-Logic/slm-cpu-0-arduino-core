@@ -114,6 +114,8 @@ jobs:
           "$TOOL" version | grep -qx 'slm-cpu-0-netflash 9.9.9'
       - name: Compile the smoke sketch
         run: arduino-cli compile --fqbn "$FQBN" --warnings default tools/ci/sketches/slm_cpu_0_smoke
+      - name: Compile the server API check (OPC UA and S7 listeners)
+        run: arduino-cli compile --fqbn "$FQBN" --warnings default tools/ci/sketches/slm_cpu_0_net_api
       - name: The upload recipe must name no host interpreter and no default address
         run: |
           set -euo pipefail

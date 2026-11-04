@@ -280,6 +280,36 @@ def build_ethernet(src, dest):
           "   * whatever the sketch passed to Ethernet.begin(). */\n"
           "  slm_cpu_0_get_mac(macaddress);\n\n")
 
+    # Arduino Ethernet 2.x accept(): each new connection is handed out once and
+    # leaves the server's table, so the caller's stop() is its only owner.
+    srv_h, srv_cpp = s / "EthernetServer.h", s / "EthernetServer.cpp"
+    patch(srv_h, "    void accept(void);\n  public:\n    EthernetServer(uint16_t port = 80);\n",
+          "    void reap(void);\n  public:\n    EthernetServer(uint16_t port = 80);\n"
+          "    EthernetClient accept();\n")
+    patch(srv_cpp, "void EthernetServer::accept()\n", "void EthernetServer::reap()\n")
+    patch(srv_cpp, "  accept();\n", "  reap();\n", count=2)
+    patch(srv_cpp, "EthernetClient EthernetServer::available()\n",
+          "EthernetClient EthernetServer::accept()\n{\n  reap();\n\n"
+          "  for (int n = 0; n < MAX_CLIENT; n++) {\n"
+          "    struct tcp_struct *tcp = _tcp_client[n];\n"
+          "    if (tcp != NULL && tcp->pcb != NULL && tcp->state == TCP_ACCEPTED) {\n"
+          "      _tcp_client[n] = NULL;\n"
+          "      return EthernetClient(tcp);\n"
+          "    }\n  }\n\n"
+          "  struct tcp_struct *none = NULL;\n  return EthernetClient(none);\n}\n\n"
+          "EthernetClient EthernetServer::available()\n")
+    cli_h, cli_cpp = s / "EthernetClient.h", s / "EthernetClient.cpp"
+    patch(cli_h, "    virtual int available();\n",
+          "    virtual int available();\n    virtual int availableForWrite();\n")
+    patch(cli_cpp, "int EthernetClient::read()\n",
+          "int EthernetClient::availableForWrite()\n{\n"
+          "  if ((_tcp_client == NULL) || (_tcp_client->pcb == NULL) ||\n"
+          "      ((_tcp_client->state != TCP_ACCEPTED) && (_tcp_client->state != TCP_CONNECTED))) {\n"
+          "    return 0;\n  }\n  return tcp_sndbuf(_tcp_client->pcb);\n}\n\n"
+          "int EthernetClient::read()\n")
+    # Upstream reads this flag uninitialised when every slot is taken.
+    patch(s / "utility/stm32_eth.cpp", "  uint8_t accepted;\n", "  uint8_t accepted = 0;\n")
+
     (dest / "library.properties").write_text(ETHERNET_PROPERTIES, encoding="utf-8")
     check_includes(s, ["STM32Ethernet.h", "EthernetUdp.h", "LwIP.h"])
 
