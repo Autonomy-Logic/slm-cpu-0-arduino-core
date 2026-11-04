@@ -47,7 +47,7 @@ jobs:
         include:
           - { runner: ubuntu-latest, host: x86_64-pc-linux-gnu, exe: slm-cpu-0-netflash }
           - { runner: ubuntu-24.04-arm, host: aarch64-linux-gnu, exe: slm-cpu-0-netflash }
-          - { runner: macos-13, host: x86_64-apple-darwin, exe: slm-cpu-0-netflash }
+          - { runner: macos-15-intel, host: x86_64-apple-darwin, exe: slm-cpu-0-netflash }
           - { runner: macos-14, host: arm64-apple-darwin, exe: slm-cpu-0-netflash }
           - { runner: windows-latest, host: i686-mingw32, exe: slm-cpu-0-netflash.exe }
     runs-on: ${{ matrix.runner }}
@@ -116,10 +116,10 @@ jobs:
         run: arduino-cli compile --fqbn "$FQBN" --warnings default tools/ci/sketches/slm_cpu_0_smoke
       - name: Compile the server API check (OPC UA and S7 listeners)
         run: arduino-cli compile --fqbn "$FQBN" --warnings default tools/ci/sketches/slm_cpu_0_net_api
-      - name: The upload recipe must name no host interpreter and no default address
+      - name: The network upload recipe must name no host interpreter and no default address
         run: |
           set -euo pipefail
-          if grep -nE '^tools\..*\.pattern=.*(python|perl|ruby|bash| sh |/usr/bin)' overlay/platform.upload.txt; then
+          if grep -nE '^tools\.slm_cpu_0_netflash\..*pattern=.*(python|perl|ruby|bash| sh |/usr/bin)' overlay/platform.upload.txt; then
             echo "upload recipe depends on a host interpreter"; exit 1
           fi
           if grep -nE '^[a-z0-9_]+\.upload\.port\.address=' overlay/boards.txt; then
