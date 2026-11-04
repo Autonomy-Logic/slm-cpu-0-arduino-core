@@ -1,0 +1,19 @@
+# Uploader tools
+# -------------------
+# tools/ci/build-release.py replaces the upstream uploader and debugger sections with this.
+
+# Network upload: "arduino-cli upload --port <board IP>". The tool asks the running
+# program to start the bootloader, sends the image over TFTP and checks that it runs.
+tools.slm_cpu_0_netflash.path={runtime.tools.slm-cpu-0-netflash.path}
+tools.slm_cpu_0_netflash.cmd=slm-cpu-0-netflash
+tools.slm_cpu_0_netflash.cmd.windows=slm-cpu-0-netflash.exe
+tools.slm_cpu_0_netflash.upload.params.verbose=-v
+tools.slm_cpu_0_netflash.upload.params.quiet=
+tools.slm_cpu_0_netflash.upload.pattern="{path}/{cmd}" upload {upload.verbose} --ip "{upload.port.address}" --bin "{build.path}/{build.project_name}.bin"
+
+# STM32CubeProgrammer over SWD, for development boards without read protection
+tools.stm32CubeProg.path={runtime.tools.STM32Tools.path}
+tools.stm32CubeProg.cmd=stm32CubeProg.sh
+tools.stm32CubeProg.upload.params.verbose=
+tools.stm32CubeProg.upload.params.quiet=
+tools.stm32CubeProg.upload.pattern="{busybox}" sh "{path}/{cmd}" -i {upload.protocol} -f "{build.path}/{build.project_name}.bin" -o {build.flash_offset} {upload.options}
