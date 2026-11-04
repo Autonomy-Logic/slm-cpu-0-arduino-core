@@ -1,0 +1,221 @@
+{
+  "packages": [
+    {
+      "name": "FACTS",
+      "maintainer": "Autonomy Logic",
+      "websiteURL": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core",
+      "email": "support@autonomylogic.com",
+      "help": {
+        "online": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core"
+      },
+      "platforms": [
+        {
+          "name": "FACTS SLM-CPU-0 (STM32F4)",
+          "architecture": "stm32",
+          "version": "0.1.0",
+          "category": "Contributed",
+          "help": {
+            "online": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core"
+          },
+          "url": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core/releases/download/v0.1.0/FACTS-stm32-slm-cpu-0-0.1.0.tar.bz2",
+          "archiveFileName": "FACTS-stm32-slm-cpu-0-0.1.0.tar.bz2",
+          "checksum": "SHA-256:8ab95804aeb11b80f95c6d7b4f3ff611912a9b308b55e377188118d989fd96c8",
+          "size": "2176121",
+          "boards": [
+            {
+              "name": "SLM-CPU-0"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "FACTS",
+              "name": "arm-gcc",
+              "version": "14.2.1-1.1"
+            },
+            {
+              "packager": "FACTS",
+              "name": "CMSIS",
+              "version": "6.2.0"
+            },
+            {
+              "packager": "FACTS",
+              "name": "STM32Tools",
+              "version": "2.4.0"
+            },
+            {
+              "packager": "FACTS",
+              "name": "slm-cpu-0-netflash",
+              "version": "0.1.0"
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "arm-gcc",
+          "version": "14.2.1-1.1",
+          "systems": [
+            {
+              "host": "arm64-apple-darwin",
+              "url": "https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/download/v14.2.1-1.1/xpack-arm-none-eabi-gcc-14.2.1-1.1-darwin-arm64.tar.gz",
+              "archiveFileName": "xpack-arm-none-eabi-gcc-14.2.1-1.1-darwin-arm64.tar.gz",
+              "checksum": "SHA-256:f52ea3760c53b25d726a7345be60a210736293db85f92daa39d1d22d34e2c995",
+              "size": "273237409"
+            },
+            {
+              "host": "aarch64-linux-gnu",
+              "url": "https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/download/v14.2.1-1.1/xpack-arm-none-eabi-gcc-14.2.1-1.1-linux-arm64.tar.gz",
+              "archiveFileName": "xpack-arm-none-eabi-gcc-14.2.1-1.1-linux-arm64.tar.gz",
+              "checksum": "SHA-256:a1ac95c8d9347020d61e387e644a2c1806556b77162958a494d2f5f3d5fe7053",
+              "size": "280440646"
+            },
+            {
+              "host": "i686-mingw32",
+              "url": "https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/download/v14.2.1-1.1/xpack-arm-none-eabi-gcc-14.2.1-1.1-win32-x64.zip",
+              "archiveFileName": "xpack-arm-none-eabi-gcc-14.2.1-1.1-win32-x64.zip",
+              "checksum": "SHA-256:0b2d496b383ba578182eb57b3f7d35ff510e36eda56257883b902fa07c3bba55",
+              "size": "323368593"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "url": "https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/download/v14.2.1-1.1/xpack-arm-none-eabi-gcc-14.2.1-1.1-darwin-x64.tar.gz",
+              "archiveFileName": "xpack-arm-none-eabi-gcc-14.2.1-1.1-darwin-x64.tar.gz",
+              "checksum": "SHA-256:b5bf8d5af099fd464d1543e5b8901308fb64116fa7a244426cacf4ff1b882fc7",
+              "size": "277780822"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "url": "https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/download/v14.2.1-1.1/xpack-arm-none-eabi-gcc-14.2.1-1.1-linux-x64.tar.gz",
+              "archiveFileName": "xpack-arm-none-eabi-gcc-14.2.1-1.1-linux-x64.tar.gz",
+              "checksum": "SHA-256:ed8c7d207a85d00da22b90cf80ab3b0b2c7600509afadf6b7149644e9d4790a6",
+              "size": "283880244"
+            }
+          ]
+        },
+        {
+          "name": "CMSIS",
+          "version": "6.2.0",
+          "systems": [
+            {
+              "host": "aarch64-linux-gnu",
+              "url": "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/6.2.0/CMSIS-6.2.0.tar.bz2",
+              "archiveFileName": "CMSIS-6.2.0.tar.bz2",
+              "checksum": "SHA-256:e9dcf458a333cda8d4332bb3a4058e8c3de1626c4a567250c60151b590a1d8ce",
+              "size": "232576"
+            },
+            {
+              "host": "arm64-apple-darwin",
+              "url": "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/6.2.0/CMSIS-6.2.0.tar.bz2",
+              "archiveFileName": "CMSIS-6.2.0.tar.bz2",
+              "checksum": "SHA-256:e9dcf458a333cda8d4332bb3a4058e8c3de1626c4a567250c60151b590a1d8ce",
+              "size": "232576"
+            },
+            {
+              "host": "i686-mingw32",
+              "url": "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/6.2.0/CMSIS-6.2.0.tar.bz2",
+              "archiveFileName": "CMSIS-6.2.0.tar.bz2",
+              "checksum": "SHA-256:e9dcf458a333cda8d4332bb3a4058e8c3de1626c4a567250c60151b590a1d8ce",
+              "size": "232576"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "url": "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/6.2.0/CMSIS-6.2.0.tar.bz2",
+              "archiveFileName": "CMSIS-6.2.0.tar.bz2",
+              "checksum": "SHA-256:e9dcf458a333cda8d4332bb3a4058e8c3de1626c4a567250c60151b590a1d8ce",
+              "size": "232576"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "url": "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/6.2.0/CMSIS-6.2.0.tar.bz2",
+              "archiveFileName": "CMSIS-6.2.0.tar.bz2",
+              "checksum": "SHA-256:e9dcf458a333cda8d4332bb3a4058e8c3de1626c4a567250c60151b590a1d8ce",
+              "size": "232576"
+            }
+          ]
+        },
+        {
+          "name": "STM32Tools",
+          "version": "2.4.0",
+          "systems": [
+            {
+              "host": "aarch64-linux-gnu",
+              "url": "https://github.com/stm32duino/Arduino_Tools/releases/download/2.4.0/STM32Tools-2.4.0-mac.tar.bz2",
+              "archiveFileName": "STM32Tools-2.4.0-mac.tar.bz2",
+              "checksum": "SHA-256:24837da71dfd2888900970b7a58403d559b04bbde4411af65a157809a05efb0c",
+              "size": "209941"
+            },
+            {
+              "host": "arm64-apple-darwin",
+              "url": "https://github.com/stm32duino/Arduino_Tools/releases/download/2.4.0/STM32Tools-2.4.0-mac.tar.bz2",
+              "archiveFileName": "STM32Tools-2.4.0-mac.tar.bz2",
+              "checksum": "SHA-256:24837da71dfd2888900970b7a58403d559b04bbde4411af65a157809a05efb0c",
+              "size": "209941"
+            },
+            {
+              "host": "i686-mingw32",
+              "url": "https://github.com/stm32duino/Arduino_Tools/releases/download/2.4.0/STM32Tools-2.4.0-windows.tar.bz2",
+              "archiveFileName": "STM32Tools-2.4.0-windows.tar.bz2",
+              "checksum": "SHA-256:cb418380693f5b5774fb237f679d83cfb5fecf5dc66065b2424381794c84696d",
+              "size": "2439820"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "url": "https://github.com/stm32duino/Arduino_Tools/releases/download/2.4.0/STM32Tools-2.4.0-mac.tar.bz2",
+              "archiveFileName": "STM32Tools-2.4.0-mac.tar.bz2",
+              "checksum": "SHA-256:24837da71dfd2888900970b7a58403d559b04bbde4411af65a157809a05efb0c",
+              "size": "209941"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "url": "https://github.com/stm32duino/Arduino_Tools/releases/download/2.4.0/STM32Tools-2.4.0-linux.tar.bz2",
+              "archiveFileName": "STM32Tools-2.4.0-linux.tar.bz2",
+              "checksum": "SHA-256:774944ca27a8f57a23d418c716af6ce3707545b5e121996f958c3856f6325d83",
+              "size": "203281"
+            }
+          ]
+        },
+        {
+          "name": "slm-cpu-0-netflash",
+          "version": "0.1.0",
+          "systems": [
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "url": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core/releases/download/v0.1.0/slm-cpu-0-netflash-0.1.0-x86_64-pc-linux-gnu.tar.gz",
+              "archiveFileName": "slm-cpu-0-netflash-0.1.0-x86_64-pc-linux-gnu.tar.gz",
+              "checksum": "SHA-256:f6ae2352d990850a8aad555d372bfb2a7b743ad7a9de5d1c15201386cfe6b86d",
+              "size": "910501"
+            },
+            {
+              "host": "aarch64-linux-gnu",
+              "url": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core/releases/download/v0.1.0/slm-cpu-0-netflash-0.1.0-aarch64-linux-gnu.tar.gz",
+              "archiveFileName": "slm-cpu-0-netflash-0.1.0-aarch64-linux-gnu.tar.gz",
+              "checksum": "SHA-256:e5b76fbedb0e9cede837ac16db41eab99c85faf3e1718c8877c2e72df336fb74",
+              "size": "852360"
+            },
+            {
+              "host": "x86_64-apple-darwin",
+              "url": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core/releases/download/v0.1.0/slm-cpu-0-netflash-0.1.0-x86_64-apple-darwin.tar.gz",
+              "archiveFileName": "slm-cpu-0-netflash-0.1.0-x86_64-apple-darwin.tar.gz",
+              "checksum": "SHA-256:25ca77bb2b1ae21fc7a52853a45cb7b510c0876fd40d88c89b8a815e91532edc",
+              "size": "943897"
+            },
+            {
+              "host": "arm64-apple-darwin",
+              "url": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core/releases/download/v0.1.0/slm-cpu-0-netflash-0.1.0-arm64-apple-darwin.tar.gz",
+              "archiveFileName": "slm-cpu-0-netflash-0.1.0-arm64-apple-darwin.tar.gz",
+              "checksum": "SHA-256:34c710807213117e752d57191c4a310a4e809f4bc81cda7034e8ec18943fc231",
+              "size": "901058"
+            },
+            {
+              "host": "i686-mingw32",
+              "url": "https://github.com/Autonomy-Logic/slm-cpu-0-arduino-core/releases/download/v0.1.0/slm-cpu-0-netflash-0.1.0-i686-mingw32.tar.gz",
+              "archiveFileName": "slm-cpu-0-netflash-0.1.0-i686-mingw32.tar.gz",
+              "checksum": "SHA-256:eb9d493a96a48ba0928a62cf19dd073e6948f52da957bea7dfd80e60f62294b6",
+              "size": "963676"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
