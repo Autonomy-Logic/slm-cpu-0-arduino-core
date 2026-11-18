@@ -126,3 +126,5 @@ Sources: `bootloader/src/main.c`, `bootloader/src/boot_policy.c`, `bootloader/sr
   cycle); else the last network settings in the config log, using DHCP when they say so; else the
   identity record's address; else DHCP. When DHCP gets no answer, it falls back to `169.254.10.10`,
   mask `255.255.0.0`.
+
+<!-- gate test -->
