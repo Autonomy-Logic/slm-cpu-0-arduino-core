@@ -1,0 +1,38 @@
+{
+  "product": "slm-cpu-0-arduino-core",
+  "title": "SLM-CPU-0 Arduino Core",
+  "subtitle": "FACTS:stm32 Arduino platform and slm-cpu-0-netflash Ethernet uploader",
+  "version": "",
+  "assessedAt": "2026-11",
+  "sbomBasename": "slm-cpu-0-arduino-core",
+  "ecosystem": "go + pinned upstream archives",
+  "securityContact": "Thiago Alves — thiago.alves@autonomylogic.com",
+  "advisorySource": "OSV via osv-scanner (aggregates the Go vulnerability database and the GitHub Advisory Database)",
+  "_note_ids": "Every triage entry lists the advisory ids it accounts for. build-report.mjs cross-checks the live post-suppression scan against these: an advisory no entry claims is reported in section 4a as untriaged instead of being silently omitted.",
+  "_note_counts": "advisories/counts describe the last FULL assessment (assessedAt) and are only rendered when the report is built without a live scan. With --osv-raw/--osv-delta the numbers come from that run.",
+  "advisories": { "total": 0, "critical": 0, "high": 0, "moderate": 0, "low": 0 },
+  "counts": {
+    "affected": { "n": 0, "sev": "none" },
+    "mitigated": { "n": 0, "sev": "none" },
+    "notAffected": { "n": 0, "pct": "—" }
+  },
+  "headline": "No advisory has been triaged for this repository yet. The numbers in the Key metrics table come from this run's scan; any advisory it reports is listed in section 4a until it is triaged.",
+  "scope": "This repository builds the <code>FACTS:stm32</code> Arduino platform for the Synergy Logic SLM-CPU-0 (STM32F407) and its Ethernet uploader <code>slm-cpu-0-netflash</code>, a Go program shipped as a board manager tool for five hosts. The platform archive bundles a trimmed STM32duino core, STM32Ethernet and LwIP with local changes; the Arm GCC toolchain, CMSIS and STM32Tools are referenced from the board manager index at their upstream URLs.",
+  "scopeNote": "The automated scan covers the Go module of the uploader (<code>tools/slm-cpu-0-netflash/go.mod</code>, standard library only). The upstream C/C++ sources and toolchains pinned in <code>tools/ci/upstream.json</code> are inventoried in the SBOM from <code>security/components.json</code> but are not in any OSV ecosystem, so advisories against them are triaged by hand. The Go standard library version compiled into the uploader is not read from <code>go.mod</code> by the scanner.",
+  "methodologyNote": "Advisories were obtained from OSV via <code>osv-scanner</code>, honoring the suppression baseline in <code>osv-scanner.toml</code>. The upstream archives are downloaded at the versions and SHA-256 digests pinned in <code>tools/ci/upstream.json</code>.",
+  "licenseNote": "The repository and the uploader are GPL-3.0. Bundled upstream code keeps its licences (LGPL-2.1, BSD-3-Clause, Apache-2.0); see <code>NOTICE.md</code> and the components CSV of the release SBOM.",
+  "affected": [],
+  "mitigated": [],
+  "notAffected": [],
+  "criticalNote": "No critical advisory has been triaged for this repository.",
+  "remediation": [
+    "<b>No action recorded.</b> Triage any advisory listed in section 4a."
+  ],
+  "practices": [
+    { "practice": "Upstream archives pinned by version and SHA-256 (tools/ci/upstream.json)", "status": "In place" },
+    { "practice": "SBOM generated per release in CycloneDX and SPDX", "status": "In place" },
+    { "practice": "CI security gate runs on every pull request and reports newly-introduced critical advisories", "status": "In place" },
+    { "practice": "Automated advisory matching for the upstream C/C++ components", "status": "Not covered by OSV" },
+    { "practice": "That gate configured as a required status check, so it blocks the merge", "status": "Not yet enforced" }
+  ]
+}
