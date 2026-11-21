@@ -49,6 +49,9 @@ jobs:
         with:
           # Full history and tags: the SBOM version comes from `git describe --tags`.
           fetch-depth: 0
+          # The archive step gets GH_TOKEN explicitly; no token is left in .git/config
+          # for the downloaded tools that run before it.
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with: { node-version: "22" }

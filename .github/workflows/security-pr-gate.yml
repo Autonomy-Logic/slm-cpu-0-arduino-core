@@ -37,7 +37,9 @@ jobs:
   gate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR head
+      # The default pull_request checkout is the merge commit; HEAD^1 is the base it
+      # was computed on, which stays current when the base branch moves.
+      - name: Checkout PR merge commit
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -76,8 +78,11 @@ jobs:
 
       - name: Scan BASE
         run: |
-          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
-          git worktree add -f /tmp/base "${{ github.event.pull_request.base.sha }}"
+          # The event's base sha is not refreshed when the base branch moves; the merge
+          # commit's first parent is the base the PR is actually merged into.
+          BASE_SHA="$(git rev-parse HEAD^1)"
+          echo "Base commit: $BASE_SHA"
+          git worktree add -f /tmp/base "$BASE_SHA"
           CFG=""; [ -f /tmp/head-config.toml ] && CFG="--config=/tmp/head-config.toml"
           set +e
           osv-scanner scan $CFG --recursive --format=json --output=/tmp/base.json /tmp/base
