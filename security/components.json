@@ -1,0 +1,116 @@
+{
+  "_note": "Hand-maintained inventory merged into the CycloneDX SBOM by scripts/merge-components.mjs. Versions and SHA-256 digests are cross-checked against tools/ci/upstream.json on every SBOM run; a mismatch, or an upstream entry with no component here, fails the run.",
+  "root": {
+    "name": "slm-cpu-0-arduino-core",
+    "type": "application",
+    "description": "FACTS:stm32 Arduino platform for the Synergy Logic SLM-CPU-0 and its Ethernet uploader",
+    "publisher": "Autonomy Logic",
+    "supplier": "Autonomy Logic",
+    "purl": "pkg:github/Autonomy-Logic/slm-cpu-0-arduino-core",
+    "licenses": [{ "license": { "id": "GPL-3.0-only" } }]
+  },
+  "components": [
+    {
+      "type": "application",
+      "name": "slm-cpu-0-netflash",
+      "group": "github.com/Autonomy-Logic/slm-cpu-0-arduino-core/tools",
+      "versionFrom": "root",
+      "publisher": "Autonomy Logic",
+      "supplier": "Autonomy Logic",
+      "purl": "pkg:golang/github.com/Autonomy-Logic/slm-cpu-0-arduino-core/tools/slm-cpu-0-netflash",
+      "licenses": [{ "license": { "id": "GPL-3.0-only" } }],
+      "description": "Ethernet uploader shipped as a board manager tool, built from tools/slm-cpu-0-netflash",
+      "distribution": "bundled"
+    },
+    {
+      "type": "library",
+      "name": "stdlib",
+      "versionFrom": "go",
+      "publisher": "The Go Authors",
+      "supplier": "The Go Authors",
+      "purl": "pkg:golang/stdlib",
+      "licenses": [{ "license": { "id": "BSD-3-Clause" } }],
+      "description": "Go standard library statically linked into slm-cpu-0-netflash",
+      "goMod": "tools/slm-cpu-0-netflash/go.mod",
+      "distribution": "bundled"
+    },
+    {
+      "type": "library",
+      "name": "Arduino_Core_STM32",
+      "group": "stm32duino",
+      "version": "2.12.0",
+      "publisher": "STMicroelectronics",
+      "supplier": "STMicroelectronics",
+      "purl": "pkg:github/stm32duino/Arduino_Core_STM32@2.12.0",
+      "licenses": [{ "expression": "LGPL-2.1-or-later AND BSD-3-Clause AND Apache-2.0" }],
+      "description": "STM32duino core, trimmed to the STM32F4 series; licences per upstream License.md",
+      "upstream": { "archive": "core" },
+      "distribution": "bundled"
+    },
+    {
+      "type": "library",
+      "name": "STM32Ethernet",
+      "group": "stm32duino",
+      "version": "1.5.0",
+      "publisher": "STMicroelectronics",
+      "supplier": "STMicroelectronics",
+      "purl": "pkg:github/stm32duino/STM32Ethernet@1.5.0",
+      "licenses": [{ "license": { "id": "LGPL-2.1-or-later" } }],
+      "description": "Ethernet library, bundled as SLM_CPU_0_Ethernet with local changes",
+      "upstream": { "archive": "ethernet" },
+      "distribution": "bundled"
+    },
+    {
+      "type": "library",
+      "name": "LwIP",
+      "group": "stm32duino",
+      "version": "2.2.1",
+      "publisher": "STMicroelectronics",
+      "supplier": "STMicroelectronics",
+      "purl": "pkg:github/stm32duino/LwIP@2.2.1",
+      "licenses": [{ "license": { "id": "BSD-3-Clause" } }],
+      "description": "lwIP TCP/IP stack packaged by STM32duino, bundled as SLM_CPU_0_LwIP",
+      "upstream": { "archive": "lwip" },
+      "distribution": "bundled"
+    },
+    {
+      "type": "application",
+      "name": "xpack-arm-none-eabi-gcc",
+      "group": "xpack-dev-tools",
+      "version": "14.2.1-1.1",
+      "publisher": "xPack",
+      "supplier": "xPack",
+      "purl": "pkg:github/xpack-dev-tools/arm-none-eabi-gcc-xpack@v14.2.1-1.1",
+      "licenses": [{ "expression": "GPL-3.0-or-later WITH GCC-exception-3.1" }],
+      "description": "Arm GCC toolchain; its runtime libraries are linked into every sketch",
+      "upstream": { "tool": "xpack-arm-none-eabi-gcc" },
+      "distribution": "referenced"
+    },
+    {
+      "type": "library",
+      "name": "CMSIS",
+      "group": "stm32duino",
+      "version": "6.2.0",
+      "publisher": "Arm",
+      "supplier": "STMicroelectronics",
+      "purl": "pkg:github/stm32duino/ArduinoModule-CMSIS@6.2.0",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }],
+      "description": "Arm CMSIS headers",
+      "upstream": { "tool": "CMSIS" },
+      "distribution": "referenced"
+    },
+    {
+      "type": "application",
+      "name": "STM32Tools",
+      "group": "stm32duino",
+      "version": "2.4.0",
+      "publisher": "STMicroelectronics",
+      "supplier": "STMicroelectronics",
+      "purl": "pkg:github/stm32duino/Arduino_Tools@2.4.0",
+      "licenses": [{ "expression": "GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only" }],
+      "description": "STM32duino host upload tools; licences per upstream LICENCE.md",
+      "upstream": { "tool": "STM32Tools" },
+      "distribution": "referenced"
+    }
+  ]
+}
