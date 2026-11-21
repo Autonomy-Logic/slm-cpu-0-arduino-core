@@ -81,3 +81,4 @@ arduino-cli compile -b FACTS:stm32:slm_cpu_0 tools/ci/sketches/slm_cpu_0_smoke
 
 Work lands on `development` through pull requests; releases are merged to
 `main` and tagged `v<version>`.
+
