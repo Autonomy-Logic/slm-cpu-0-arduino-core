@@ -62,12 +62,18 @@ for (const k of Object.keys(upstream.archives || {})) if (!covered.archive.has(k
 for (const t of upstream.tools || []) if (!covered.tool.has(t.name)) errors.push(`upstream tool "${t.name}" has no component in ${compsPath}`);
 if (errors.length) fail(`inventory out of date:\n  - ${errors.join('\n  - ')}`);
 
+// CycloneDX supplier is an object; the inventory may give a plain name.
+const supplierOf = (c) => {
+  const name = typeof c.supplier === 'string' ? c.supplier : c.supplier?.name;
+  return name ? { supplier: { name } } : {};
+};
+
 const toComponent = (c) => {
   const v = c.versionFrom === 'go' ? goVersion(c) : c.versionFrom === 'root' ? version : c.version;
   const purl = c.purl && v && !c.purl.includes('@') ? `${c.purl}@${v}` : c.purl;
   const out = {
     type: c.type || 'library', name: c.name, ...(c.group ? { group: c.group } : {}),
-    ...(v ? { version: v } : {}), ...(c.publisher ? { publisher: c.publisher } : {}),
+    ...(v ? { version: v } : {}), ...supplierOf(c), ...(c.publisher ? { publisher: c.publisher } : {}),
     ...(c.description ? { description: c.description } : {}),
     ...(purl ? { purl, 'bom-ref': purl } : {}),
     licenses: c.licenses || [],
@@ -110,7 +116,7 @@ const components = [...byKey.values()].map((c) => {
 const rootPurl = version ? `${inv.root.purl}@${version}` : inv.root.purl;
 const root = {
   type: inv.root.type || 'application', name: inv.root.name, ...(version ? { version } : {}),
-  ...(inv.root.publisher ? { publisher: inv.root.publisher } : {}),
+  ...supplierOf(inv.root), ...(inv.root.publisher ? { publisher: inv.root.publisher } : {}),
   ...(inv.root.description ? { description: inv.root.description } : {}),
   purl: rootPurl, 'bom-ref': rootPurl, licenses: inv.root.licenses || [],
 };
