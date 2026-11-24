@@ -1,0 +1,13 @@
+# osv-scanner suppression baseline for slm-cpu-0-arduino-core = the VEX "not
+# affected" decisions from the vulnerability report. Empty until an advisory has
+# been triaged; never add an entry without a CISA VEX justification.
+#
+# osv-scanner covers the Go uploader (tools/slm-cpu-0-netflash/go.mod). The
+# upstream C/C++ sources and toolchains pinned in tools/ci/upstream.json are not
+# in any OSV ecosystem; see security/README.md for how they are tracked.
+#
+# Entries need id, reason and ignoreUntil. Expiry dates are staggered by
+# scripts/gen-osv-ignores.mjs so a single month never re-opens the whole baseline.
+# Suppressions written by the automated monthly triage carry
+# "AI-TRIAGED [unreviewed]" in their reason until a human clears the marker while
+# reviewing the PR diff.
